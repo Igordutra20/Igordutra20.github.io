@@ -137,6 +137,45 @@
         font-size: 16px;
       }
     }
+    .nav-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 24px;
+  cursor: pointer;
+  color: #fff;
+  font-size: 24px;
+  position: relative;
+}
+
+.nav-item.active .home-icon::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 100%;
+  height: 3px;
+  background-color: #00ff88;
+}
+
+.nav-label {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+#barra-pesquisa {
+  width: 100%;
+  max-width: 400px;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  margin-top: 20px;
+  background-color: #1e1e1e;
+  color: #fff;
+  border: 1px solid #00ff88;
+}
   </style>
 </head>
 <body>
@@ -149,7 +188,14 @@
 </div>
 
   <header>
-    <i class="fas fa-home home-icon active"></i>
+  <div class="nav-item active" onclick="mostrarPagina('home')">
+    <i class="fas fa-home home-icon"></i>
+    <span class="nav-label">Home</span>
+  </div>
+  <div class="nav-item" onclick="mostrarPagina('nft')">
+    <i class="fas fa-clone home-icon"></i>
+    <span class="nav-label">NFT</span>
+  </div>
   </header>
 
   <main>
@@ -158,6 +204,12 @@
     <button onclick="conectarCarteira()">Conectar Carteira</button>
     <p id="status"></p>
   </main>
+  <section id="pagina-nft" style="display: none;">
+  <main>
+    <div class="titulo-site">Procurar NFT</div>
+    <input type="text" id="barra-pesquisa" placeholder="Pré-visualização: Procurar NFT" />
+  </main>
+  </section>
 
   <script>
     window.addEventListener('load', () => {
@@ -181,6 +233,19 @@
       } else {
         alert('MetaMask não detectada. Instale a extensão no seu navegador.');
       }
+    }
+    function mostrarPagina(pagina) {
+  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+  
+  if (pagina === 'home') {
+    document.querySelector('header .nav-item:nth-child(1)').classList.add('active');
+    document.querySelector('main').style.display = 'flex';
+    document.getElementById('pagina-nft').style.display = 'none';
+  } else if (pagina === 'nft') {
+    document.querySelector('header .nav-item:nth-child(2)').classList.add('active');
+    document.querySelector('main').style.display = 'none';
+    document.getElementById('pagina-nft').style.display = 'block';
+  }
     }
   </script>
 </body>
