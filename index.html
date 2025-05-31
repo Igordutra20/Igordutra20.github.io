@@ -1,9 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
+<!DOCTYPE html><html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Conectar MetaMask</title>
+  <title>Registro - Enchanted Legends</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
   <style>
     body {
@@ -11,37 +10,6 @@
       background-color: #121212;
       color: #ffffff;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    #loading-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: #000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-    }
-    #loading-screen h1 {
-      color: #00ff88;
-      font-size: 2.5rem;
-      text-shadow: 0 0 8px #00ff88, 0 0 16px #008855;
-      margin-bottom: 20px;
-    }
-    .spinner {
-      border: 5px solid rgba(0, 255, 136, 0.2);
-      border-top: 5px solid #00ff88;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      animation: spin 1s linear infinite;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
     }
     header {
       display: flex;
@@ -107,112 +75,65 @@
     button:hover {
       background-color: #00cc6f;
     }
-    #status {
-      margin-top: 20px;
-      font-size: 14px;
-      color: #aaa;
-      word-break: break-word;
-    }
-    #barra-pesquisa {
+    input {
       width: 100%;
-      max-width: 400px;
+      max-width: 280px;
       padding: 12px;
       font-size: 16px;
-      border: none;
       border-radius: 8px;
-      margin-top: 20px;
-      background-color: #1e1e1e;
-      color: #fff;
       border: 1px solid #00ff88;
+      background-color: #1e1e1e;
+      color: white;
+      margin-bottom: 10px;
     }
-    @media (min-width: 768px) {
-      .titulo-site { font-size: 3rem; }
-      h1 { font-size: 2.5rem; }
-      button { font-size: 18px; max-width: 300px; }
-      #status { font-size: 16px; }
-    }
-  
-    .nft-container {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-      margin-top: 0;
-      text-align: center;
+    #mensagem-registro {
+      margin-top: 10px;
+      color: red;
     }
   </style>
 </head>
 <body>
-<div id="loading-screen">
-  <h1>Enchanted Legends</h1>
-  <div class="spinner"></div>
-  <p style="color: #aaa; margin-top: 20px; font-size: 1.2rem;">Coming soon</p>
-</div>
-
 <header>
-  <div class="nav-item active" onclick="mostrarPagina('home')">
+  <div class="nav-item active">
     <i class="fas fa-home home-icon"></i>
     <span class="nav-label">Home</span>
   </div>
-  <div class="nav-item" onclick="mostrarPagina('nft')">
-    <i class="fas fa-clone home-icon"></i>
-    <span class="nav-label">NFT</span>
-  </div>
 </header>
-
 <main>
-  <section id="pagina-home">
+  <section>
     <div class="titulo-site">Enchanted Legends</div>
-    <h1>Conectar à Carteira MetaMask</h1>
-    <button onclick="conectarCarteira()">Conectar Carteira</button>
-    <p id="status"></p>
-  </section>
-
-  <section id="pagina-nft" style="display: none;">
-    <div class="nft-container">
-      <div class="titulo-site">Procurar NFT</div>
-      <input type="text" id="barra-pesquisa" placeholder="Procurar NFT" />
+    <h1>Registro</h1>
+    <div id="form-registro">
+      <input type="text" id="username" placeholder="Nome de Usuário" required><br>
+      <input type="email" id="email" placeholder="Email" required><br>
+      <input type="password" id="senha" placeholder="Senha" required><br>
+      <button onclick="registrarUsuario()">Registrar</button>
+      <p id="mensagem-registro"></p>
     </div>
   </section>
 </main>
-
 <script>
-window.addEventListener('load', () => {
-  const loading = document.getElementById('loading-screen');
-  setTimeout(() => {
-    loading.style.opacity = '0';
-    loading.style.transition = 'opacity 0.5s ease';
-    setTimeout(() => loading.style.display = 'none', 500);
-  }, 5000);
-});
+function validarSenha(senha) {
+  const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+  return regex.test(senha);
+}async function registrarUsuario() { const username = document.getElementById('username').value.trim(); const email = document.getElementById('email').value.trim(); const senha = document.getElementById('senha').value; const mensagem = document.getElementById('mensagem-registro');
 
-async function conectarCarteira() {
-  if (typeof window.ethereum !== 'undefined') {
-    try {
-      const contas = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      document.getElementById('status').innerText = 'Carteira conectada: ' + contas[0];
-    } catch (erro) {
-      console.error(erro);
-      document.getElementById('status').innerText = 'Erro ao conectar a carteira';
-    }
-  } else {
-    alert('MetaMask não detectada. Instale a extensão no seu navegador.');
-  }
+if (!username || !email || !senha) { mensagem.innerText = 'Preencha todos os campos.'; return; }
+
+if (!validarSenha(senha)) { mensagem.innerText = 'A senha deve ter ao menos 8 caracteres, 1 letra maiúscula, 1 número e 1 símbolo.'; return; }
+
+try { const resposta = await fetch('https://enchanted-legends-back.onrender.com/api/registro', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, email, senha }) });
+
+const dados = await resposta.json();
+
+if (!resposta.ok) {
+  mensagem.innerText = dados.erro || 'Erro ao registrar.';
+} else {
+  localStorage.setItem('emailParaConfirmar', email);
+  window.location.href = 'confirmar-email.html';
 }
 
-function mostrarPagina(pagina) {
-  document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-  document.getElementById('pagina-home').style.display = 'none';
-  document.getElementById('pagina-nft').style.display = 'none';
+} catch (e) { mensagem.innerText = 'Erro de conexão com o servidor.'; } } </script>
 
-  if (pagina === 'home') {
-    document.querySelector('header .nav-item:nth-child(1)').classList.add('active');
-    document.getElementById('pagina-home').style.display = 'block';
-  } else if (pagina === 'nft') {
-    document.querySelector('header .nav-item:nth-child(2)').classList.add('active');
-    document.getElementById('pagina-nft').style.display = 'block';
-  }
-}
-</script>
 </body>
 </html>
