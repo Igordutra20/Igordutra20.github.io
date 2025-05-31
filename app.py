@@ -1,4 +1,10 @@
-from flask import Flask, request, jsonify from flask_cors import CORS import re import random import smtplib import sqlite3 from email.mime.text import MIMEText
+from flask import Flask, request, jsonify 
+from flask_cors import CORS 
+import re 
+import random 
+import smtplib 
+import sqlite3 
+from email.mime.text import MIMEText
 
 app = Flask(name) CORS(app)
 
