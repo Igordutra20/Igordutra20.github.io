@@ -30,8 +30,8 @@ def senha_valida(senha):
 
 # Envio de e-mail
 def enviar_email(destinatario, codigo):
-    remetente = "seuemail@gmail.com"
-    senha_email = "suasenha"
+    remetente = "enchantedlegendsoficial@gmail.com"
+    senha_email = "vvho yxpp wuzj zexd"
 
     msg = MIMEText(f"Seu código de verificação é: {codigo}")
     msg['Subject'] = "Verificação de E-mail - Enchanted Legends"
