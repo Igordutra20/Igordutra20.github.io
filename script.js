@@ -1,4 +1,4 @@
-const backendURL = "https://SEU-BACKEND.onrender.com"; // substitua pela URL do seu backend após subir
+const backendURL = "https://enchanted-backend.onrender.com"; // substitua pela URL do seu backend após subir
 
 const connectWalletBtn = document.getElementById("connectWalletBtn");
 const mainContent = document.getElementById("mainContent");
