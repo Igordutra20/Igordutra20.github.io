@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="pt-BR">
+<!DOCTYPE html>
+<html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -11,6 +12,7 @@
       color: #ffffff;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     }
+
     header {
       display: flex;
       align-items: center;
@@ -19,6 +21,7 @@
       border-bottom: 2px solid #00ff88;
       margin-bottom: 20px;
     }
+
     .nav-item {
       display: flex;
       flex-direction: column;
@@ -29,6 +32,7 @@
       font-size: 24px;
       position: relative;
     }
+
     .nav-item.active .home-icon::after {
       content: "";
       position: absolute;
@@ -38,11 +42,13 @@
       height: 3px;
       background-color: #00ff88;
     }
+
     .nav-label {
       font-size: 12px;
       color: #aaa;
       margin-top: 4px;
     }
+
     main {
       display: flex;
       flex-direction: column;
@@ -50,20 +56,23 @@
       text-align: center;
       padding: 20px;
     }
+
     .titulo-site {
       font-size: 2.5rem;
       color: #00ff88;
       text-shadow: 0 0 8px #00ff88, 0 0 16px #008855;
       margin-bottom: 30px;
     }
+
     h1 {
       font-size: 2rem;
       margin-bottom: 20px;
     }
+
     button {
-      background-color: #00ff88;
+      background-color: #f6851b; /* Cor da MetaMask */
       color: #000;
-      padding: 14px 28px;
+      padding: 12px 20px;
       font-size: 16px;
       border: none;
       border-radius: 8px;
@@ -71,21 +80,22 @@
       transition: background 0.3s;
       width: 100%;
       max-width: 280px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
     }
+
     button:hover {
-      background-color: #00cc6f;
+      background-color: #e2761b;
     }
-    input {
-      width: 100%;
-      max-width: 280px;
-      padding: 12px;
-      font-size: 16px;
-      border-radius: 8px;
-      border: 1px solid #00ff88;
-      background-color: #1e1e1e;
-      color: white;
-      margin-bottom: 10px;
+
+    #metamask-button img {
+      width: 24px;
+      vertical-align: middle;
+      margin-right: 8px;
     }
+
     #mensagem-registro {
       margin-top: 10px;
       color: red;
@@ -104,36 +114,38 @@
     <div class="titulo-site">Enchanted Legends</div>
     <h1>Registro</h1>
     <div id="form-registro">
-      <input type="text" id="username" placeholder="Nome de Usuário" required><br>
-      <input type="email" id="email" placeholder="Email" required><br>
-      <input type="password" id="senha" placeholder="Senha" required><br>
-      <button onclick="registrarUsuario()">Registrar</button>
+      <button id="metamask-button" onclick="conectarMetamask()">
+        <img src="https://raw.githubusercontent.com/MetaMask/brand-resources/master/SVG/metamask-fox.svg" alt="MetaMask">
+        Conectar
+      </button>
       <p id="mensagem-registro"></p>
     </div>
   </section>
 </main>
+
 <script>
-function validarSenha(senha) {
-  const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
-  return regex.test(senha);
-}async function registrarUsuario() { const username = document.getElementById('username').value.trim(); const email = document.getElementById('email').value.trim(); const senha = document.getElementById('senha').value; const mensagem = document.getElementById('mensagem-registro');
+  async function conectarMetamask() {
+    const mensagem = document.getElementById('mensagem-registro');
 
-if (!username || !email || !senha) { mensagem.innerText = 'Preencha todos os campos.'; return; }
+    if (typeof window.ethereum === 'undefined') {
+      mensagem.innerText = 'MetaMask não está instalada.';
+      return;
+    }
 
-if (!validarSenha(senha)) { mensagem.innerText = 'A senha deve ter ao menos 8 caracteres, 1 letra maiúscula, 1 número e 1 símbolo.'; return; }
+    try {
+      const contas = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      const conta = contas[0];
+      mensagem.style.color = '#00ff88';
+      mensagem.innerText = `Conectado com: ${conta}`;
 
-try { const resposta = await fetch('https://enchanted-legends-back.onrender.com/api/registro', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ username, email, senha }) });
-
-const dados = await resposta.json();
-
-if (!resposta.ok) {
-  mensagem.innerText = dados.erro || 'Erro ao registrar.';
-} else {
-  localStorage.setItem('emailParaConfirmar', email);
-  window.location.href = 'confirmar-email.html';
-}
-
-} catch (e) { mensagem.innerText = 'Erro de conexão com o servidor.'; } } </script>
-
+      // Aqui você pode salvar o endereço ou redirecionar o usuário
+      // localStorage.setItem('enderecoCarteira', conta);
+      // window.location.href = 'alguma-pagina.html';
+    } catch (erro) {
+      mensagem.style.color = 'red';
+      mensagem.innerText = 'Conexão com MetaMask cancelada.';
+    }
+  }
+</script>
 </body>
 </html>
