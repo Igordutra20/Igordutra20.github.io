@@ -3,149 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Registro - Enchanted Legends</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
-  <style>
-    body {
-      margin: 0;
-      background-color: #121212;
-      color: #ffffff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-
-    header {
-      display: flex;
-      align-items: center;
-      padding: 16px 24px;
-      background-color: #1e1e1e;
-      border-bottom: 2px solid #00ff88;
-      margin-bottom: 20px;
-    }
-
-    .nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-right: 24px;
-      cursor: pointer;
-      color: #fff;
-      font-size: 24px;
-      position: relative;
-    }
-
-    .nav-item.active .home-icon::after {
-      content: "";
-      position: absolute;
-      bottom: -8px;
-      left: 0;
-      width: 100%;
-      height: 3px;
-      background-color: #00ff88;
-    }
-
-    .nav-label {
-      font-size: 12px;
-      color: #aaa;
-      margin-top: 4px;
-    }
-
-    main {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      padding: 20px;
-    }
-
-    .titulo-site {
-      font-size: 2.5rem;
-      color: #00ff88;
-      text-shadow: 0 0 8px #00ff88, 0 0 16px #008855;
-      margin-bottom: 30px;
-    }
-
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 20px;
-    }
-
-    button {
-      background-color: #f6851b; /* Cor da MetaMask */
-      color: #000;
-      padding: 12px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      transition: background 0.3s;
-      width: 100%;
-      max-width: 280px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: bold;
-    }
-
-    button:hover {
-      background-color: #e2761b;
-    }
-
-    #metamask-button img {
-      width: 24px;
-      vertical-align: middle;
-      margin-right: 8px;
-    }
-
-    #mensagem-registro {
-      margin-top: 10px;
-      color: red;
-    }
-  </style>
+  <title>Enchanted Legends</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-<header>
-  <div class="nav-item active">
-    <i class="fas fa-home home-icon"></i>
-    <span class="nav-label">Home</span>
-  </div>
-</header>
-<main>
-  <section>
-    <div class="titulo-site">Enchanted Legends</div>
-    <h1>Registro</h1>
-    <div id="form-registro">
-      <button id="metamask-button" onclick="conectarMetamask()">
-        <img src="https://raw.githubusercontent.com/MetaMask/brand-resources/master/SVG/metamask-fox.svg" alt="MetaMask">
-        Conectar
-      </button>
-      <p id="mensagem-registro"></p>
-    </div>
-  </section>
-</main>
+  <header>
+    <h1>Enchanted Legends</h1>
+    <button id="connectWalletBtn">
+      <img src="metamask.png" alt="MetaMask" width="20" style="vertical-align: middle;" />
+      Conectar com MetaMask
+    </button>
+  </header>
 
-<script>
-  async function conectarMetamask() {
-    const mensagem = document.getElementById('mensagem-registro');
+  <main id="mainContent" style="display: none;">
+    <p><strong>Carteira conectada:</strong> <span id="walletAddress"></span></p>
+    <p><strong>Assinatura confirmada!</strong></p>
 
-    if (typeof window.ethereum === 'undefined') {
-      mensagem.innerText = 'MetaMask não está instalada.';
-      return;
-    }
+    <h2>Cadastro</h2>
+    <input type="text" id="username" placeholder="Nome de Usuário" />
+    <input type="email" id="email" placeholder="Email" />
+    <button id="registerBtn">Registrar</button>
+    <p id="registerMsg" style="color: red;"></p>
+  </main>
 
-    try {
-      const contas = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      const conta = contas[0];
-      mensagem.style.color = '#00ff88';
-      mensagem.innerText = `Conectado com: ${conta}`;
-
-      // Aqui você pode salvar o endereço ou redirecionar o usuário
-      // localStorage.setItem('enderecoCarteira', conta);
-      // window.location.href = 'alguma-pagina.html';
-    } catch (erro) {
-      mensagem.style.color = 'red';
-      mensagem.innerText = 'Conexão com MetaMask cancelada.';
-    }
-  }
-</script>
+  <script src="script.js"></script>
 </body>
 </html>
