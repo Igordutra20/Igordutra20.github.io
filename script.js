@@ -35,27 +35,31 @@ async function connectWallet() {
       params: [nonce, wallet]
     });
 
-    // Verificar assinatura no backend
-    const verifyRes = await fetch(`${backendURL}/verify-signature`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ wallet, signature })
-    });
+    // Verificar assinatura no backend (código atualizado)
+const verifyRes = await fetch(`${backendURL}/verify-signature`, {
+  method: "POST",
+  headers: { "Content-Type": "application/json" },
+  body: JSON.stringify({ 
+    wallet: wallet.toLowerCase(), // Garante lowercase
+    signature,
+    originalNonce: nonces[wallet] // Envia o nonce original para comparação
+  })
+});
 
-    const { success } = await verifyRes.json();
-
-    if (success) {
-      mainContent.style.display = "block";
-      connectWalletBtn.style.display = "none";
-    } else {
-      alert("Falha na verificação da assinatura.");
-    }
-  } catch (err) {
-    console.error(err);
-    alert("Erro ao conectar.");
-  }
+if (!verifyRes.ok) {
+  const errorData = await verifyRes.json();
+  throw new Error(errorData.error || "Falha na verificação");
 }
 
+const { success, message } = await verifyRes.json();
+
+if (success) {
+  mainContent.style.display = "block";
+  connectWalletBtn.style.display = "none";
+} else {
+  throw new Error(message || "Assinatura inválida");
+}
+    
 async function registerUser() {
   const username = document.getElementById("username").value.trim();
   const email = document.getElementById("email").value.trim();
